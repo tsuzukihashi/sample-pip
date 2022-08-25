@@ -11,14 +11,23 @@
 		4ADC279F28AD6AE900EF888C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC279E28AD6AE900EF888C /* ContentView.swift */; };
 		4ADC27A128AD6AEA00EF888C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ADC27A028AD6AEA00EF888C /* Assets.xcassets */; };
 		4ADC27A428AD6AEA00EF888C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ADC27A328AD6AEA00EF888C /* Preview Assets.xcassets */; };
+		4ADC27AB28AD6B1800EF888C /* PiPContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC27AA28AD6B1800EF888C /* PiPContainerView.swift */; };
+		4ADC27AD28AD6B5800EF888C /* PiPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC27AC28AD6B5800EF888C /* PiPManager.swift */; };
+		4ADC27B328AD6BC700EF888C /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC27B228AD6BC700EF888C /* UIViewExtension.swift */; };
+		4ADC27B528AD6E8F00EF888C /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC27B428AD6E8F00EF888C /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A03186128AF579B00A8DBC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4ADC279928AD6AE900EF888C /* sample-pip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-pip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ADC279C28AD6AE900EF888C /* sample_pipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_pipApp.swift; sourceTree = "<group>"; };
 		4ADC279E28AD6AE900EF888C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4ADC27A028AD6AEA00EF888C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4ADC27A328AD6AEA00EF888C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4ADC27AA28AD6B1800EF888C /* PiPContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPContainerView.swift; sourceTree = "<group>"; };
+		4ADC27AC28AD6B5800EF888C /* PiPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPManager.swift; sourceTree = "<group>"; };
+		4ADC27B228AD6BC700EF888C /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		4ADC27B428AD6E8F00EF888C /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +41,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A03186228AF76AD00A8DBC5 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4ADC27B228AD6BC700EF888C /* UIViewExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		4A03186328AF76C000A8DBC5 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				4ADC27AC28AD6B5800EF888C /* PiPManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		4A03186428AF76CF00A8DBC5 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				4ADC279E28AD6AE900EF888C /* ContentView.swift */,
+				4ADC27B428AD6E8F00EF888C /* ContentViewModel.swift */,
+				4ADC27AA28AD6B1800EF888C /* PiPContainerView.swift */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
 		4ADC279028AD6AE900EF888C = {
 			isa = PBXGroup;
 			children = (
@@ -51,8 +86,11 @@
 		4ADC279B28AD6AE900EF888C /* sample-pip */ = {
 			isa = PBXGroup;
 			children = (
+				4A03186128AF579B00A8DBC5 /* Info.plist */,
+				4A03186328AF76C000A8DBC5 /* Manager */,
+				4A03186228AF76AD00A8DBC5 /* Extension */,
+				4A03186428AF76CF00A8DBC5 /* Content */,
 				4ADC279C28AD6AE900EF888C /* sample_pipApp.swift */,
-				4ADC279E28AD6AE900EF888C /* ContentView.swift */,
 				4ADC27A028AD6AEA00EF888C /* Assets.xcassets */,
 				4ADC27A228AD6AEA00EF888C /* Preview Content */,
 			);
@@ -137,8 +175,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ADC27B528AD6E8F00EF888C /* ContentViewModel.swift in Sources */,
 				4ADC279F28AD6AE900EF888C /* ContentView.swift in Sources */,
+				4ADC27AB28AD6B1800EF888C /* PiPContainerView.swift in Sources */,
 				4ADC279D28AD6AE900EF888C /* sample_pipApp.swift in Sources */,
+				4ADC27AD28AD6B5800EF888C /* PiPManager.swift in Sources */,
+				4ADC27B328AD6BC700EF888C /* UIViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,17 +306,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"sample-pip/Preview Content\"";
 				DEVELOPMENT_TEAM = A93B2TPWBT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "sample-pip/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -293,17 +339,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"sample-pip/Preview Content\"";
 				DEVELOPMENT_TEAM = A93B2TPWBT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "sample-pip/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
