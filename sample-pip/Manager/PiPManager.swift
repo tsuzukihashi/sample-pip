@@ -6,6 +6,19 @@ final class PiPManager: NSObject {
     public static let height: CGFloat = 120
 
     public static let shared: PiPManager = .init()
+
+    override init() {
+        // PiPするにはAudioSessionをactiveにしておく必要がある
+        let session = AVAudioSession.sharedInstance()
+        do {
+            // playAndRecordとmoviewPlaybackの組み合わせで音声を止めずにPiPをすることができる
+            try session.setCategory(.playAndRecord, mode: .moviePlayback)
+            try session.setActive(true)
+        } catch {
+            print("Failed to set AVAudioSession: \(error)")
+        }
+    }
+
     public var bufferDisplayLayer: AVSampleBufferDisplayLayer = .init()
 
     private var timer: Timer?
@@ -13,7 +26,13 @@ final class PiPManager: NSObject {
 
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.frame = .init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 120)
+        label.frame = .init(
+            origin: .zero,
+            size: .init(
+                width: UIScreen.main.bounds.width,
+                height: PiPManager.height
+            )
+        )
         label.font = .monospacedSystemFont(ofSize: 24, weight: .medium)
         label.textAlignment = .center
         label.textColor = .black
@@ -23,10 +42,9 @@ final class PiPManager: NSObject {
 
     func start() {
         guard AVPictureInPictureController.isPictureInPictureSupported() else { return }
-        // PiPするにはAudioSessionをactiveにしておく必要がある
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(.playback, mode: .moviePlayback)
-        try! session.setActive(true)
+        if let sampleBuffer = dateLabel.toCMSampleBuffer() {
+            bufferDisplayLayer.enqueue(sampleBuffer)
+        }
 
         let timerBlock: ((Timer) -> Void) = { [weak self] timer in
             guard let buffer: CMSampleBuffer = self?.nextBuffer() else { return }

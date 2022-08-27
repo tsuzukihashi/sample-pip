@@ -18,7 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A03186128AF579B00A8DBC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4ADC279928AD6AE900EF888C /* sample-pip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-pip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ADC279C28AD6AE900EF888C /* sample_pipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sample_pipApp.swift; sourceTree = "<group>"; };
 		4ADC279E28AD6AE900EF888C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,7 +85,6 @@
 		4ADC279B28AD6AE900EF888C /* sample-pip */ = {
 			isa = PBXGroup;
 			children = (
-				4A03186128AF579B00A8DBC5 /* Info.plist */,
 				4A03186328AF76C000A8DBC5 /* Manager */,
 				4A03186228AF76AD00A8DBC5 /* Extension */,
 				4A03186428AF76CF00A8DBC5 /* Content */,
@@ -237,7 +235,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -291,7 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
