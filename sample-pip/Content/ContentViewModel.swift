@@ -21,8 +21,4 @@ final class ContentViewModel: ObservableObject {
     func didTapPiPSwap() {
         pipManager.swapPictureInPicture()
     }
-
-    func isPiP() -> Bool {
-        pipManager.isPiP()
-    }
 }

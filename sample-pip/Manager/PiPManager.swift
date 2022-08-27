@@ -4,25 +4,12 @@ import UIKit
 
 final class PiPManager: NSObject {
     public static let height: CGFloat = 120
-
     public static let shared: PiPManager = .init()
-
-    override init() {
-        // PiPするにはAudioSessionをactiveにしておく必要がある
-        let session = AVAudioSession.sharedInstance()
-        do {
-            // playAndRecordとmoviewPlaybackの組み合わせで音声を止めずにPiPをすることができる
-            try session.setCategory(.playAndRecord, mode: .moviePlayback)
-            try session.setActive(true)
-        } catch {
-            print("Failed to set AVAudioSession: \(error)")
-        }
-    }
-
     public var bufferDisplayLayer: AVSampleBufferDisplayLayer = .init()
 
-    private var timer: Timer?
     private var pipController: AVPictureInPictureController?
+    private var timer: Timer?
+    private var pause: Bool = false
 
     private let dateLabel: UILabel = {
         let label = UILabel()
@@ -40,9 +27,21 @@ final class PiPManager: NSObject {
         return label
     }()
 
+    override init() {
+        // PiPするにはAudioSessionをactiveにしておく必要がある
+        let session = AVAudioSession.sharedInstance()
+        do {
+            // playAndRecordとmoviewPlaybackの組み合わせで音声を止めずにPiPをすることができる
+            try session.setCategory(.playAndRecord, mode: .moviePlayback)
+            try session.setActive(true)
+        } catch {
+            print("Failed to set AVAudioSession: \(error)")
+        }
+    }
+
     func start() {
         guard AVPictureInPictureController.isPictureInPictureSupported() else { return }
-        if let sampleBuffer = dateLabel.toCMSampleBuffer() {
+        if let sampleBuffer = nextBuffer() {
             bufferDisplayLayer.enqueue(sampleBuffer)
         }
 
@@ -51,7 +50,7 @@ final class PiPManager: NSObject {
             self?.bufferDisplayLayer.enqueue(buffer)
         }
 
-        let timer = Timer(timeInterval: 0.1, repeats: true, block: timerBlock)
+        let timer = Timer(timeInterval: 1, repeats: true, block: timerBlock)
         self.timer = timer
         RunLoop.main.add(timer, forMode: .default)
 
@@ -82,30 +81,39 @@ final class PiPManager: NSObject {
     }
 
     func swapPictureInPicture() {
-        if isPiP() {
+        if isPiPActive() {
             pipController?.stopPictureInPicture()
         } else {
             pipController?.startPictureInPicture()
         }
     }
 
-    func isPiP() -> Bool {
+    func isPiPActive() -> Bool {
         guard let pipController = pipController else { return false }
         return pipController.isPictureInPictureActive
     }
 }
 
 extension PiPManager: AVPictureInPictureControllerDelegate {
+    // NOTE: Picture in Pictureの開始されることを通知
+    func pictureInPictureControllerWillStartPictureInPicture(
+        _ pictureInPictureController: AVPictureInPictureController
+    ) {}
+    // NOTE: Picture in Pictureが開始されたこと通知
+    func pictureInPictureControllerDidStartPictureInPicture(
+        _ pictureInPictureController: AVPictureInPictureController
+    ) {}
+    // NOTE: Picture in Pictureの起動に失敗したことを通知
     func pictureInPictureController(
         _ pictureInPictureController: AVPictureInPictureController,
         failedToStartPictureInPictureWithError error: Error
     ) {}
-
-    func pictureInPictureControllerWillStartPictureInPicture(
+    // NOTE: Picture in Pictureが停止することを通知
+    func pictureInPictureControllerWillStopPictureInPicture(
         _ pictureInPictureController: AVPictureInPictureController
     ) {}
-
-    func pictureInPictureControllerWillStopPictureInPicture(
+    // NOTE: Picture in Pictureが停止したことを通知
+    func pictureInPictureControllerDidStopPictureInPicture(
         _ pictureInPictureController: AVPictureInPictureController
     ) {}
 }
@@ -114,24 +122,38 @@ extension PiPManager: AVPictureInPictureSampleBufferPlaybackDelegate {
     func pictureInPictureController(
         _ pictureInPictureController: AVPictureInPictureController,
         setPlaying playing: Bool
-    ) {}
+    ) {
+        pause.toggle()
+        dateLabel.text = "pause: \(pause)"
+        if let sampleBuffer = dateLabel.toCMSampleBuffer() {
+            bufferDisplayLayer.enqueue(sampleBuffer)
+        }
+    }
 
     func pictureInPictureControllerTimeRangeForPlayback(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> CMTimeRange {
-        return CMTimeRange(start: .negativeInfinity, duration: .positiveInfinity)
+        return CMTimeRange(
+            start: .negativeInfinity,
+            duration: .positiveInfinity
+        )
     }
 
     func pictureInPictureControllerIsPlaybackPaused(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> Bool {
-        return false
+        return pause
     }
 
     func pictureInPictureController(
         _ pictureInPictureController: AVPictureInPictureController,
         didTransitionToRenderSize newRenderSize: CMVideoDimensions
-    ) {}
+    ) {
+        dateLabel.text = "w: \(newRenderSize.width) h: \(newRenderSize.height)"
+        if let sampleBuffer = dateLabel.toCMSampleBuffer() {
+            bufferDisplayLayer.enqueue(sampleBuffer)
+        }
+    }
 
     func pictureInPictureController(
         _ pictureInPictureController: AVPictureInPictureController,
