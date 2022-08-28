@@ -2,13 +2,14 @@ import UIKit
 import CoreMedia
 
 extension UIView {
-    // CMSampleBuffer: システムがメディアサンプルデータをメディアパイプラインで移動するために使用するオブジェクト
+    /**
+     UIViewをCMSampleBufferに変換する
+     */
     func toCMSampleBuffer() -> CMSampleBuffer? {
         let scale: CGFloat = UIScreen.main.scale
         let size: CGSize = .init(width: bounds.width * scale, height: bounds.height * scale)
         guard let pixelBuffer = makeCVPixelBuffer(scale: scale, size: size) else { return nil }
         defer {
-            // イメージバッファのアンロック
             CVPixelBufferUnlockBaseAddress(pixelBuffer,  CVPixelBufferLockFlags(rawValue: 0))
         }
         /**
@@ -34,11 +35,11 @@ extension UIView {
         }
     }
 
+    /**
+     CVPixelBufferを作る
+     メインメモリ内のピクセルを保持するイメージバッファであり、フレームを生成するアプリや、Core Imageを使用するアプリで利用
+     */
     private func makeCVPixelBuffer(scale: CGFloat, size: CGSize) -> CVPixelBuffer? {
-        /**
-         CVPixelBufferを作る
-         メインメモリ内のピクセルを保持するイメージバッファであり、フレームを生成するアプリや、Core Imageを使用するアプリで利用
-         */
         var pixelBuffer: CVPixelBuffer?
         let createPixelBufferResult: OSStatus = CVPixelBufferCreate(
             kCFAllocatorDefault,
@@ -46,8 +47,8 @@ extension UIView {
             Int(size.height),
             kCVPixelFormatType_32ARGB,
             [
-                kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue!,
-                kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue!,
+                kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue as Any,
+                kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue as Any,
                 kCVPixelBufferIOSurfacePropertiesKey: [:] as CFDictionary,
             ] as CFDictionary,
             &pixelBuffer
@@ -61,8 +62,10 @@ extension UIView {
         return pixelBuffer
     }
 
+    /**
+     CGContextの作成
+     */
     private func makeCGContext(scale: CGFloat, size: CGSize, pixelBuffer: CVPixelBuffer) -> CGContext? {
-        // Quartz 2Dの描画先を作る
         guard let context: CGContext = .init(
             data: CVPixelBufferGetBaseAddress(pixelBuffer),
             width: Int(size.width),
@@ -78,8 +81,10 @@ extension UIView {
         return context
     }
 
+    /**
+     CMFormatDescriptionの作成
+     */
     private func makeCMFormatDescription(pixelBuffer: CVPixelBuffer) -> CMFormatDescription? {
-        // メディアデータを記述
         var formatDescription: CMFormatDescription?
         let createImageBufferResult: OSStatus = CMVideoFormatDescriptionCreateForImageBuffer(
             allocator: kCFAllocatorDefault,
@@ -95,13 +100,15 @@ extension UIView {
         return formatDescription
     }
 
+    /**
+     サンプルバッファ内のサンプルのタイミング情報の取得
+     */
     private func getCMSampleTimingInfo() -> CMSampleTimingInfo {
         let preferredTimescale: CMTimeScale = 60
         let currentTime: CMTime = .init(
             seconds: CACurrentMediaTime(),
             preferredTimescale: preferredTimescale
         )
-        // サンプルバッファ内のサンプルのタイミング情報
         let timingInfo: CMSampleTimingInfo = .init(
             duration: .init(seconds: 1, preferredTimescale: preferredTimescale),
             presentationTimeStamp: currentTime,
@@ -111,4 +118,3 @@ extension UIView {
         return timingInfo
     }
 }
-

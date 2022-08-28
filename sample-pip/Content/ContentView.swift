@@ -18,9 +18,9 @@ struct ContentView: View {
                     viewModel.didTapMainButton()
                 } label: {
                     VStack(spacing: 8) {
-                        Image(systemName: viewModel.running ? "stop.fill" : "play.fill")
+                        Image(systemName: viewModel.isReady ? "stop.fill" : "play.fill")
                             .font(.title)
-                        Text(viewModel.running ? "STOP" : "START")
+                        Text(viewModel.isReady ? "STOP" : "START")
                     }
                     .frame(width: 120)
                 }
@@ -37,7 +37,7 @@ struct ContentView: View {
                     .frame(width: 120)
                 }
                 .buttonStyle(.bordered)
-                .disabled(!viewModel.running)
+                .disabled(!viewModel.isReady)
             }
 
             PiPContainerView(
@@ -50,8 +50,8 @@ struct ContentView: View {
                 )
             )
             .frame(height: PiPManager.height)
-            .animation(.easeIn, value: viewModel.running)
-            .opacity(viewModel.running ? 1 : 0)
+            .animation(.easeIn, value: viewModel.isReady)
+            .opacity(viewModel.isReady ? 1 : 0)
         }
     }
 }

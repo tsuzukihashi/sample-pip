@@ -2,20 +2,16 @@ import Foundation
 import SwiftUI
 
 final class ContentViewModel: ObservableObject {
-    @Published var running: Bool = false
-    let pipManager: PiPManager
-
-    init() {
-        pipManager = .shared
-    }
+    @Published var isReady: Bool = false
+    let pipManager: PiPManager = .shared
 
     func didTapMainButton() {
-        if running {
-            pipManager.stop()
+        if isReady {
+            pipManager.reset()
         } else {
-            pipManager.start()
+            pipManager.prepare()
         }
-        running.toggle()
+        isReady.toggle()
     }
 
     func didTapPiPSwap() {

@@ -28,10 +28,12 @@ final class PiPManager: NSObject {
     }()
 
     override init() {
-        // PiPするにはAudioSessionをactiveにしておく必要がある
+        /**
+         PiPするにはAudioSessionをactiveにしておく必要がある
+         playAndRecordとmoviewPlaybackの組み合わせで音声を止めずにPiPをすることができる
+         */
         let session = AVAudioSession.sharedInstance()
         do {
-            // playAndRecordとmoviewPlaybackの組み合わせで音声を止めずにPiPをすることができる
             try session.setCategory(.playAndRecord, mode: .moviePlayback)
             try session.setActive(true)
         } catch {
@@ -39,7 +41,7 @@ final class PiPManager: NSObject {
         }
     }
 
-    func start() {
+    func prepare() {
         guard AVPictureInPictureController.isPictureInPictureSupported() else { return }
         if let sampleBuffer = nextBuffer() {
             bufferDisplayLayer.enqueue(sampleBuffer)
@@ -63,15 +65,17 @@ final class PiPManager: NSObject {
         pipController?.delegate = self
     }
 
-    func stop() {
+    func reset() {
         timer?.invalidate()
         timer = nil
         pipController = nil
     }
 
-    func nextBuffer() -> CMSampleBuffer? {
-        // AVSampleBufferDisplayLayerが壊れた時に復旧する
-        // （PiP中にYoutubeなど再生したら壊れることがあるため）
+    private func nextBuffer() -> CMSampleBuffer? {
+        /**
+         AVSampleBufferDisplayLayerが壊れた時に復旧する
+         （PiP中にYoutubeなど再生したら壊れることがあるため）
+         */
         if bufferDisplayLayer.status == .failed {
             bufferDisplayLayer.flush()
         }
@@ -81,16 +85,11 @@ final class PiPManager: NSObject {
     }
 
     func swapPictureInPicture() {
-        if isPiPActive() {
+        if pipController?.isPictureInPictureActive == true {
             pipController?.stopPictureInPicture()
         } else {
             pipController?.startPictureInPicture()
         }
-    }
-
-    func isPiPActive() -> Bool {
-        guard let pipController = pipController else { return false }
-        return pipController.isPictureInPictureActive
     }
 }
 
