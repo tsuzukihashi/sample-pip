@@ -131,13 +131,13 @@ extension PiPManager: AVPictureInPictureSampleBufferPlaybackDelegate {
     func pictureInPictureControllerTimeRangeForPlayback(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> CMTimeRange {
-        return CMTimeRange(start: .zero, end: .positiveInfinity)
+        return CMTimeRange(start: .negativeInfinity, end: .positiveInfinity)
     }
 
     func pictureInPictureControllerIsPlaybackPaused(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> Bool {
-        return true
+        return pause
     }
 
     func pictureInPictureController(
