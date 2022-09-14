@@ -5,9 +5,7 @@ import UIKit
 final class PiPManager: NSObject {
     public static let height: CGFloat = 120
     public static let shared: PiPManager = .init()
-    public var bufferDisplayLayer: AVSampleBufferDisplayLayer = .init()
-
-    private var pipController: AVPictureInPictureController?
+    public let bufferDisplayLayer: AVSampleBufferDisplayLayer = .init()
     private var timer: Timer?
     private var pause: Bool = false
 
@@ -27,6 +25,12 @@ final class PiPManager: NSObject {
         return label
     }()
 
+    private lazy var pictureInPictureController: AVPictureInPictureController = {
+        let contentSource = AVPictureInPictureController.ContentSource(sampleBufferDisplayLayer: bufferDisplayLayer, playbackDelegate: self)
+        let controller = AVPictureInPictureController(contentSource: contentSource)
+        return controller
+    }()
+
     override init() {
         /**
          PiPするにはAudioSessionをactiveにしておく必要がある
@@ -39,6 +43,9 @@ final class PiPManager: NSObject {
         } catch {
             print("Failed to set AVAudioSession: \(error)")
         }
+        super.init()
+        pictureInPictureController.delegate = self
+
     }
 
     func prepare() {
@@ -55,20 +62,11 @@ final class PiPManager: NSObject {
         let timer = Timer(timeInterval: 1, repeats: true, block: timerBlock)
         self.timer = timer
         RunLoop.main.add(timer, forMode: .default)
-
-        pipController = AVPictureInPictureController(
-            contentSource: AVPictureInPictureController.ContentSource(
-                sampleBufferDisplayLayer: bufferDisplayLayer,
-                playbackDelegate: self
-            )
-        )
-        pipController?.delegate = self
     }
 
     func reset() {
         timer?.invalidate()
         timer = nil
-        pipController = nil
     }
 
     private func nextBuffer() -> CMSampleBuffer? {
@@ -77,6 +75,7 @@ final class PiPManager: NSObject {
          （PiP中にYoutubeなど再生したら壊れることがあるため）
          */
         if bufferDisplayLayer.status == .failed {
+            pictureInPictureController.invalidatePlaybackState()
             bufferDisplayLayer.flush()
         }
         dateLabel.text = Date().formatted(date: .numeric, time: .complete)
@@ -85,10 +84,10 @@ final class PiPManager: NSObject {
     }
 
     func swapPictureInPicture() {
-        if pipController?.isPictureInPictureActive == true {
-            pipController?.stopPictureInPicture()
+        if pictureInPictureController.isPictureInPictureActive == true {
+            pictureInPictureController.stopPictureInPicture()
         } else {
-            pipController?.startPictureInPicture()
+            pictureInPictureController.startPictureInPicture()
         }
     }
 }
@@ -132,16 +131,13 @@ extension PiPManager: AVPictureInPictureSampleBufferPlaybackDelegate {
     func pictureInPictureControllerTimeRangeForPlayback(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> CMTimeRange {
-        return CMTimeRange(
-            start: .negativeInfinity,
-            duration: .positiveInfinity
-        )
+        return CMTimeRange(start: .zero, end: .positiveInfinity)
     }
 
     func pictureInPictureControllerIsPlaybackPaused(
         _ pictureInPictureController: AVPictureInPictureController
     ) -> Bool {
-        return pause
+        return true
     }
 
     func pictureInPictureController(
